@@ -15,13 +15,16 @@ class Expression {
 
   double evaluate() {
     switch (this.op_) {
-      case Operator.ADD:
+      case ADD:
         return this.left_ + this.right_;
-      case Operator.SUBTRACT:
+      case SUBTRACT:
         return this.left_ - this.right_;
-      case Operator.MULTIPLY:
+      case MULTIPLY:
         return this.left_ * this.right_;
-      case Operator.DIVIDE:
+      case DIVIDE:
+        if (this.right_ == 0) { // K: prevent division by zero; throw exception if division by zero is attempted
+          throw new ArithmeticException("Division by zero!");
+        }
         return this.left_ / this.right_;
       default:
         return 0.0;
@@ -32,7 +35,7 @@ class Expression {
 class Debug {
 
   public static void main(String[] args) {
-    Operator[] ops = new Operator[5];
+    Operator[] ops = new Operator[4]; //K: 5 -> 4
     ops[0] = Operator.DIVIDE;
     ops[1] = Operator.SUBTRACT;
     ops[2] = Operator.MULTIPLY;
@@ -48,3 +51,37 @@ class Debug {
     }
   }
 }
+
+/*
+    Zeile 18, 20 22, 24: cases sind keine Enum-Konstanten
+    Fehlermeldung:
+    **************
+    Debug03/Debug.java:18: error: an enum switch case label must be the unqualified name of an enumeration constant
+        case Operator.ADD:
+                     ^
+    Debug03/Debug.java:20: error: an enum switch case label must be the unqualified name of an enumeration constant
+        case Operator.SUBTRACT:
+                     ^
+    Debug03/Debug.java:22: error: an enum switch case label must be the unqualified name of an enumeration constant
+        case Operator.MULTIPLY:
+                     ^
+    Debug03/Debug.java:24: error: an enum switch case label must be the unqualified name of an enumeration constant
+          case Operator.DIVIDE:
+                       ^
+    **************
+    Wenn switch-case für eine Enum verwendet wird, sollten die Fälle Enum-Konstanten sein, d.h. die verschiedenen Werte der Aufzählung.
+
+    ...
+
+    Zeile 38: Es sind nur 4 Operatoren vorhanden, aber 5 werden erwartet
+    Fehlermeldung:
+    **************
+    Exception in thread "main" java.lang.NullPointerException: Cannot invoke "Operator.ordinal()" because "this.op_" is null
+        at Expression.evaluate(Debug.java:17)
+        at Debug.main(Debug.java:47)
+    **************
+
+    ...
+
+    Zeile 25: Division durch Null verhindern.
+ */

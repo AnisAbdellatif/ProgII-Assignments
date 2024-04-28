@@ -112,14 +112,27 @@ public class User {
      */
     public boolean addItem(Item item) {
         for (int i = 0; i < this.items.length; i++) {
-            if(this.items[i] == null) {
+            if (this.items[i] == null) {
                 this.items[i] = item;
                 return true;
             }
-            
+
         }
 
         return false;
+    }
+    
+    public Item getItem(String name) {
+        for (Item item : items) {
+            if(item == null) {
+                continue;
+            }
+
+            if(item.getName().equals(name)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     /**

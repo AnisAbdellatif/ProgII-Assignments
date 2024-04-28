@@ -12,10 +12,8 @@ public class Main {
         boolean a = scanner.nextBoolean();
         System.out.print("Geben sie den zweiten boolean Wert an: ");
         boolean b = scanner.nextBoolean();
-        System.out.println(String.format("a: %b, b: %b", a, b));
-
-        // boolean a = true;
-        // boolean b = true;
+        // System.out.println(String.format("a: %b, b: %b", a, b));
+        scanner.close();
 
         HalfAdder ha = new HalfAdder();
         boolean[] result = ha.add(a, b);

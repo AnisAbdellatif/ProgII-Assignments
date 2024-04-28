@@ -12,8 +12,8 @@ import de.uni_hannover.task2.CustomScanner;
  * Items are offered on this marketplace by user,
  * which can be added to this marketplace.
  * 
- * @author Kevin Schumann
- * @version 03/05/2023
+ * @author Anis Abdellatif
+ * @version 28.04.2024
  */
 public class Marketplace {
     // users of this marketplace
@@ -127,6 +127,9 @@ public class Marketplace {
         return res;
     }
     
+    /**
+     * Represents a user in the marketplace.
+     */
     public User login() {
         for (int i = 0; i < 3; i++) {
             System.out.print("Username: ");
@@ -139,6 +142,8 @@ public class Marketplace {
                     continue;
                 }
 
+                // Check if the current user's username and password match the provided values
+                // If a match is found, return the user object
                 if (this.users[j].getUsername().equals(username) && this.users[j].getPassword().equals(password)) {
                     return this.users[j];
                 }
@@ -148,6 +153,12 @@ public class Marketplace {
         return null;
     }
 
+    /**
+     * Prompts the user to enter details of a new item and adds it to the marketplace.
+     * 
+     * @param user the user who wants to add the item
+     * @return true if the item was successfully added, false otherwise
+     */
     private boolean cli_add_item(User user) {
         System.out.print("Item Name: ");
         String name = scanner.nextLine();
@@ -161,6 +172,12 @@ public class Marketplace {
         return user.addItem(item);
     }
 
+    /**
+     * Removes an item from the user's inventory based on user input.
+     * 
+     * @param user the user whose item is to be removed
+     * @return true if the item was successfully removed, false otherwise
+     */
     private boolean cli_remove_item(User user) {
         System.out.print("Item Name: ");
         String name = scanner.nextLine();
@@ -168,6 +185,12 @@ public class Marketplace {
         return user.removeItem(item);
     }
     
+    /**
+     * Allows the user to edit an item in the marketplace through the command-line interface (CLI).
+     * 
+     * @param user the user who wants to edit the item
+     * @return true if the item was successfully edited, false otherwise
+     */
     private boolean cli_edit_item(User user) {
         String name;
         float price;
@@ -202,6 +225,12 @@ public class Marketplace {
         return true;
     }
 
+    /**
+     * Displays the market categories and allows the user to choose a category to view.
+     * The available categories are: All, Clothes, Electronics, Furniture, Services, and Animals.
+     * The user can enter a number corresponding to the desired category or 'X' to exit the program.
+     * Prints the selected category or an error message if the choice is invalid.
+     */
     private void cli_print_market() {
         System.out.println("Welche Kategorie wollen Sie sich anschauen:");
         System.out.println("1. Alle");
@@ -246,6 +275,13 @@ public class Marketplace {
         }
     }
     
+    /**
+     * This method represents the command-line interface (CLI) for the marketplace.
+     * It allows the user to perform various actions such as adding items, removing items,
+     * viewing the marketplace, editing items, and exiting the program.
+     * 
+     * @return void
+     */
     public void cli() {
         User user = this.login();
 
@@ -308,6 +344,14 @@ public class Marketplace {
             second,
             "Toller Hut. Keine Anfragen, wie 'was letzter Preis'.",
             Category.CLOTHES
+        );
+
+        Item three = new Item(
+            "Handy",
+            499,
+            first,
+            "Neues Handy. Festpreis!",
+            Category.ELECTRONICS
         );
 
         first.addItem(one);

@@ -10,7 +10,7 @@ public class Monkey extends Animal {
 
   @Override
   public String getName() {
-    return super.name_;
+    return super.getName(); //K: `name_` ist `private` in `Animal`; Getter `getName()` sollte verwendet werden
   }
 
   @Override
@@ -28,3 +28,13 @@ public class Monkey extends Animal {
     return String.format("%s is a monkey with %d legs and %d arms.", this.getName(), this.getLegs(), this.getArms());
   }
 }
+
+/*
+  Zeile 13: `name_` ist `private` in `Animal`; Getter `getName()` sollte verwendet werden:
+  Fehlermeldung:
+  **************
+  ./debug/model/Monkey.java:13: error: name_ has private access in Animal
+    return super.name_;
+                ^
+  **************
+ */

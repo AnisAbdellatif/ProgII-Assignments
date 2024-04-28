@@ -5,6 +5,13 @@ import java.util.Scanner;
 import aufgabe01.HalfAdder;
 import aufgabe01.XorGate;
 
+/**
+ * The Main class is the entry point of the program.
+ * It prompts the user to enter two boolean values, performs addition using a HalfAdder object,
+ * and displays the sum and carry values.
+ * @author Anis Abdellatif
+ * @version 28.04.2024
+ */
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

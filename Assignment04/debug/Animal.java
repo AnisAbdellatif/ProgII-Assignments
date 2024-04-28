@@ -12,7 +12,7 @@ public class Animal {
     this.arms_ = arms;
   }
 
-  Animal(String name) {
+  public Animal(String name) {//K: Konsruktor `Animal(String)` ist nicht `public`
     this(name, 0, 0);
   }
 
@@ -34,3 +34,16 @@ public class Animal {
     return String.format("%s is an animal with %d legs and %d arms.", this.getName(), this.getLegs(), this.getArms());
   }
 }
+
+/*
+  Zeile 15: Konsruktor `Animal(String)` ist nicht `public`
+  Fehlermeldung:
+  **************
+  error: constructor Animal in class Animal cannot be applied to given types;
+    super(name);
+    ^
+  required: String
+  found:    String
+  reason: Animal(String) is not public in Animal; cannot be accessed from outside package
+  **************
+ */

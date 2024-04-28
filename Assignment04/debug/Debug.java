@@ -1,6 +1,7 @@
 package debug;
 
 import debug.model.*;
+import debug.Animal; //K: `Animal` wurde nicht importiert
 
 public class Debug {
   public static void main(String[] args) {
@@ -13,3 +14,15 @@ public class Debug {
     }
   }
 }
+
+/*
+  Zeile 4: `Animal` wurde nicht importiert:
+  Fehlermeldung:
+  **************
+  Debug.java:7: error: cannot find symbol
+    Animal[] animals = new Animal[3];
+    ^
+  symbol:   class Animal
+  location: class Debug
+  **************
+ */

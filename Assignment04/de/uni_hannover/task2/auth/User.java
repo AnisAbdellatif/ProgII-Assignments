@@ -122,6 +122,13 @@ public class User {
         return false;
     }
     
+    /**
+     * Retrieves an item with the specified name from the user's collection.
+     * @author Anis Abdellatif
+     * 
+     * @param name the name of the item to retrieve
+     * @return the item with the specified name, or null if no such item exists
+     */
     public Item getItem(String name) {
         for (Item item : items) {
             if(item == null) {

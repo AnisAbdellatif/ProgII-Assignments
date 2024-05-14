@@ -1,8 +1,6 @@
 package de.uni_hannover.task2.offerings;
 
 
-import de.uni_hannover.task2.auth.User;
-
 /**
  * This class represents an item that
  * can be offered on a digital marketplace.
@@ -15,9 +13,11 @@ import de.uni_hannover.task2.auth.User;
  * @version 03/05/2023
  */
 public class Item {
+    private int itemId;
     private String name;
     private float price;
-    private User owner; 
+    // private User owner; -> Depricated! Use String owner instead.
+    private String owner;  
     private String description;
     private Category category;
 
@@ -31,7 +31,8 @@ public class Item {
      * @param description Description of the item
      * @param category Category of the item.
      */
-    public Item(String name, float price, User owner, String description, Category category) {
+    public Item(String name, float price, String owner, String description, Category category) {
+        this.itemId = -1;
         this.name = name;
         this.price = price;
         this.owner = owner;
@@ -40,6 +41,36 @@ public class Item {
     }
 
 
+    /**
+     * Constructs the object with all its attributes.
+     * 
+     * @author Kevin Schumann
+     * @param itemId Id of the item
+     * @param name Name of the item
+     * @param price Price of the item
+     * @param owner Owner of the item
+     * @param description Description of the item
+     * @param category Category of the item.
+     */
+    public Item(int itemId, String name, float price, String owner, String description, Category category) {
+        this.itemId = itemId;
+        this.name = name;
+        this.price = price;
+        this.owner = owner;
+        this.description = description;
+        this.category = category;
+    }
+
+
+     /**
+     * Gets the id of the item.
+     * 
+     * @author Anis Abdellatif
+     * @return int id of the item.
+     */
+    public int getItemId() {
+        return this.itemId;
+    }
 
     /**
      * Returns a string representation of the object.
@@ -52,7 +83,7 @@ public class Item {
             "Item: %s; Price: %.2f, User: %s, Description: %s, Category: %s",
             name,
             price,
-            owner.getUsername(),
+            owner,
             description,
             category.str()
         );
@@ -104,7 +135,7 @@ public class Item {
      * @author Kevin Schumann 
      * @return Owner of the item.
      */
-	public User getUser() {
+	public String getUser() {
 		return this.owner;
 	}
 

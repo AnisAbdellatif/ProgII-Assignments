@@ -1,9 +1,10 @@
 package de.uni_hannover.task2;
 
 import java.util.*;
+
 import de.uni_hannover.task2.auth.*;
 import de.uni_hannover.task2.offerings.*;
-import java.util.Scanner;
+import de.uni_hannover.task2.communication.Communicator;
 
 /**
  * This class represents a digital marketplace.
@@ -19,6 +20,7 @@ public class Marketplace {
     private Scanner scanner = new Scanner(System.in);
     private List<User> users;
     private User loggedInUser;
+    private String username;
 
     /**
      * Constructs a marketplace object with 
@@ -65,31 +67,57 @@ public class Marketplace {
      * @author Kevin Schumann
      * @return User that matches the name/password or null
      */
-    public User login() {
-        int tries = 0;
-
-        while(tries < 3){
-            System.out.print("Enter username: ");
-            String username = scanner.nextLine();
-
-            System.out.print("Enter password: ");
-            String password = scanner.nextLine();
-
-            for (User user : this.users) {
-                int passwordMatch = user.getPassword().compareTo(password);
-                int userMatch = user.getUsername().compareTo(username);
-                
-                if(passwordMatch == 0 && userMatch == 0){
-                    this.loggedInUser = user;
-                    return user;
-                }
-            }
-
-            tries++;
+    public void login() {
+        char option = ' ';
+        while (option != 'L' && option != 'R') {
+            System.out.print("Do you want to login or register? (L/R): ");
+            option = scanner.nextLine().charAt(0);
         }
 
-        System.exit(0);
-        return null;
+        int tries = 0;
+        switch (option) {
+            case 'L':
+
+                while(tries < 3){
+                    System.out.print("Enter username: ");
+                    String username = scanner.nextLine();
+        
+                    System.out.print("Enter password: ");
+                    String password = scanner.nextLine();
+        
+                    if (Communicator.login(username, password)) {
+                        this.username = username;
+                        return;
+                    }
+        
+                    tries++;
+                }
+        
+                System.exit(0);
+                break;
+            
+            case 'R':
+                while(tries < 3){
+                    System.out.print("Enter username: ");
+                    String username = scanner.nextLine();
+        
+                    System.out.print("Enter password: ");
+                    String password = scanner.nextLine();
+        
+                    if (Communicator.register(username, password)) {
+                        System.exit(0);
+                    }
+                    System.err.println("Username already exists!");
+                    tries++;
+                }
+        
+                System.exit(0);
+                break;
+            default:
+                break;
+        }
+
+        
     }
 
     /**
@@ -148,8 +176,8 @@ public class Marketplace {
         Category cat = Category.valueOf(catString.toUpperCase());
         
         // create item and add to current user
-        Item item = new Item(name, price, this.loggedInUser, description, cat);
-        this.loggedInUser.addItem(item);
+        Item item = new Item(name, price, this.username, description, cat);
+        Communicator.addItem(this.username, item);
     }
 
     /**
@@ -162,14 +190,15 @@ public class Marketplace {
         System.out.println("\nGeben Sie die Nummer des zu entfernden Items an:\n");
         
         int counter = 1;
-        for (Item item : this.loggedInUser.getItems()) {
+        Item[] items = Communicator.getUserItems(this.username);
+        for (Item item : items) {
             System.out.println(counter + ".  " + item.str());
             counter++;
         }
         
         System.out.print("\nItem Nummer: ");
         int indexToRemove = Integer.parseInt(this.scanner.nextLine()) - 1;
-        this.loggedInUser.getItems().remove(indexToRemove);
+        Communicator.removeItem(items[indexToRemove]);
     }
 
 
@@ -184,14 +213,15 @@ public class Marketplace {
         System.out.println("\nGeben Sie die Nummer des zu ändernen Items an:\n");
         
         int counter = 1;
-        for (Item item : this.loggedInUser.getItems()) {
+        Item[] items = Communicator.getUserItems(this.username);
+        for (Item item : items) {
             System.out.println(counter + ".  " + item.str());
             counter++;
         }
 
         System.out.print("\nItem Nummer: ");
         int index = Integer.parseInt(this.scanner.nextLine()) - 1;
-        Item itemToChange = this.loggedInUser.getItems().get(index);
+        Item itemToChange = items[index];
 
         System.out.println(
                 "\nWählen Sie aus den folgenden Optionen:\n"
@@ -210,15 +240,14 @@ public class Marketplace {
             case 2:
                 System.out.print("\nNeuer Preis: ");
                 itemToChange.setPrice(
-                    Float.parseFloat(this.scanner.nextLine())
-                );
+                        Float.parseFloat(this.scanner.nextLine()));
                 break;
             case 3:
                 System.out.print("\nNeue Beschreibung: ");
                 itemToChange.setDescription(this.scanner.nextLine());
                 break;
             case 4:
-                for(Category c : Category.values()){
+                for (Category c : Category.values()) {
                     System.out.println(c);
                 }
 
@@ -229,6 +258,7 @@ public class Marketplace {
             default:
                 break;
         }
+        Communicator.updateItem(itemToChange);
 
     }
 
@@ -252,13 +282,17 @@ public class Marketplace {
 
         
         String choice = this.scanner.nextLine().toUpperCase();
-        if(choice.compareTo("ALLE") == 0) {
-            System.out.println(this.filterMarket(null));
+        if (choice.compareTo("ALLE") == 0) {
+            for (Item item : Communicator.getItems(null)) {
+                System.out.println(item.str());
+            }
             return;
         }
 
         Category category = Category.valueOf(choice);
-        System.out.println(this.filterMarket(category));
+        for (Item item : Communicator.getItems(category)) {
+            System.out.println(item.str());
+        }
 
     }
 
